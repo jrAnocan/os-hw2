@@ -66,7 +66,7 @@ void checkTheColumnOfL(int i)
     bool flag = true;
     for(int j=0;j<m;j++)
     {
-        if(L[j][i] == -1)
+        if(L[j][i] == -189)
         {
             flag = false;
         }
@@ -144,7 +144,7 @@ void initializeMatrix(int**& M, int r, int c)
         
         for(int j=0;j<c;j++)
         {
-            M[i][j] = -1;
+            M[i][j] = -189;
         }
     }
 }
