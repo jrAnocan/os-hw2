@@ -66,7 +66,7 @@ void checkTheColumnOfL(int i)
     bool flag = true;
     for(int j=0;j<m;j++)
     {
-        if(L[j][i] == -189)
+        if(L[j][i] == -1890)
         {
             flag = false;
         }
@@ -125,10 +125,30 @@ void* multiplyJL(void* args)
     pthread_mutex_unlock(&finished_jl_row);
     pthread_exit(0);
 }
-void getInitialMatrix(int**& M, int i, int n, vector<vector<int>>& lines)
+void getInitialMatrix(int**& M, int i, int n,int nn, vector<vector<int>>& lines)
 {
-    int flag = 0;
-    for(int s=(i)*(n+1) +1; flag < n;s++,flag++)
+    
+    int s;
+    int check;
+    if(i<2)
+    {
+
+        s=(i)*(n+1) +1;
+
+        check=n;
+        
+
+    }
+    else
+    {
+        s = (2)*(n+1) +(i-2)*(nn+1)+1;
+        check=nn;
+    }
+
+    
+
+
+    for(int flag = 0; flag < check;s++,flag++)
     {
        for(int t = 0 ; t<lines[s].size();t++)
        {
@@ -144,7 +164,7 @@ void initializeMatrix(int**& M, int r, int c)
         
         for(int j=0;j<c;j++)
         {
-            M[i][j] = -189;
+            M[i][j] = -1890;
         }
     }
 }
@@ -189,7 +209,7 @@ int main()
     n = lines[0][0];
     m = lines[0][1];
     k = lines[2*n+2][1];
-    
+    //cout<<"n is: "<<n<<" m is: "<<m<<" k is: "<<k<<endl;
     A = new int*[n]; for(int i=0;i<n;i++){A[i] = new int[m];}
     B = new int*[n]; for(int i=0;i<n;i++){B[i] = new int[m];}
     C = new int*[m]; for(int i=0;i<m;i++){C[i] = new int[k];}
@@ -204,13 +224,13 @@ int main()
     int thread_count = 2*n+m;
     
     
-    getInitialMatrix(A,0,n,lines);
+    getInitialMatrix(A,0,n,m,lines);
     
-    getInitialMatrix(B,1,n,lines);
+    getInitialMatrix(B,1,n,m,lines);
     
-    getInitialMatrix(C,2,m,lines);
+    getInitialMatrix(C,2,n,m,lines);
     
-    getInitialMatrix(D,3,m,lines);
+    getInitialMatrix(D,3,n,m,lines);
     
     initializeMatrix(J,n,m);
     initializeMatrix(L,m,k);
@@ -243,10 +263,10 @@ int main()
         
 		pthread_create(&threads[i], NULL, addRowCD, (args_CD+j));
     }
-    for (int i = n+m, j=0; i < n+m+n; i++,j++)
+    for (int i = n+m, k=0; i < n+m+n; i++,k++)
     {
         
-		pthread_create(&threads[i], NULL, multiplyJL, (args_AB+j));
+		pthread_create(&threads[i], NULL, multiplyJL, (args_AB+k));
     }
 
 
