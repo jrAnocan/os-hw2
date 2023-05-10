@@ -175,7 +175,7 @@ int main()
         line_no++;
     }
     /*
-    for (int i = 0; i < line_no - 1 ; i ++)
+    for (int i = 0; i < line_no ; i ++)
     {
         for(int j=0;j<lines[i].size();j++)
         {
@@ -184,10 +184,12 @@ int main()
         cout<<endl;
     }
     */
+
+   
     n = lines[0][0];
     m = lines[0][1];
     k = lines[2*n+2][1];
-
+    
     A = new int*[n]; for(int i=0;i<n;i++){A[i] = new int[m];}
     B = new int*[n]; for(int i=0;i<n;i++){B[i] = new int[m];}
     C = new int*[m]; for(int i=0;i<m;i++){C[i] = new int[k];}
@@ -203,9 +205,13 @@ int main()
     
     
     getInitialMatrix(A,0,n,lines);
+    
     getInitialMatrix(B,1,n,lines);
-    getInitialMatrix(C,2,n,lines);
-    getInitialMatrix(D,3,n,lines);
+    
+    getInitialMatrix(C,2,m,lines);
+    
+    getInitialMatrix(D,3,m,lines);
+    
     initializeMatrix(J,n,m);
     initializeMatrix(L,m,k);
     initializeMatrix(R,n,k);
@@ -252,7 +258,7 @@ int main()
         
     }
 	
-    for(int i=0;i<m;i++)
+    for(int i=0;i<n;i++)
     {
         int col;
         for(col=0;col<k-1;col++)
@@ -261,6 +267,6 @@ int main()
         }
         cout<<R[i][col]<<endl;
     }
-
+    
     return 0;
 }
