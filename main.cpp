@@ -107,8 +107,9 @@ void* multiplyJL(void* args)
     {
         
             sem_wait(&ready_L[i]);           //think what happens if context switch between these two
+            
+            multiplyMatrix(cur_row, i); // i changed the order 
             sem_post(&ready_L[i]);
-            multiplyMatrix(cur_row, i);
         
         
     }
