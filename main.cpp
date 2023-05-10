@@ -69,6 +69,7 @@ void checkTheColumnOfL(int i)
         if(L[j][i] == -1890)
         {
             flag = false;
+            break;
         }
     }
     if(flag)
