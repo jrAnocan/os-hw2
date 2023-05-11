@@ -87,9 +87,9 @@ void* addRowCD(void* args)
     {
         int val = C[cur_row][i] + D[cur_row][i];
         L[cur_row][i] = val;
-        
-        hw2_write_output(1,cur_row+1,i+1,val);
         checkTheColumnOfL(i);
+        hw2_write_output(1,cur_row+1,i+1,val);
+        
     }
     
     pthread_exit(0);
@@ -108,8 +108,9 @@ void* multiplyJL(void* args)
         
             sem_wait(&ready_L[i]);           //think what happens if context switch between these two
             
-            multiplyMatrix(cur_row, i); // i changed the order 
             sem_post(&ready_L[i]);
+            multiplyMatrix(cur_row, i); // i changed the order 
+
         
         
     }
@@ -221,7 +222,7 @@ int main()
     R = new int*[n]; for(int i=0;i<n;i++){R[i] = new int[k];}
 
     ready_J = new sem_t[n]; for(int i=0;i<n;i++) {int g = sem_init(&ready_J[i],0,0);}
-    ready_L = new sem_t[k]; for(int i=0;i<k;i++) {int g = sem_init(&ready_J[i],0,0);}
+    ready_L = new sem_t[k]; for(int i=0;i<k;i++) {int g = sem_init(&ready_L[i],0,0);}
     
     int thread_count = 2*n+m;
     
@@ -290,5 +291,28 @@ int main()
         cout<<R[i][col]<<endl;
     }
     
+
+    for(int i=0;i<n;i++)
+    {
+        delete[] A[i];
+        delete[] B[i];
+        delete[] J[i];
+        delete[] R[i];
+    }
+    delete[] A; delete[] B; delete[] J; delete[] R; 
+    delete[] ready_J; delete[] ready_L;
+
+
+    for(int i=0;i<m;i++)
+    {
+        delete[] C[i];
+        delete[] D[i];
+        delete[] L[i];
+    }
+    delete[] C; delete[] D; delete[] L;
+
+
+
+
     return 0;
 }
