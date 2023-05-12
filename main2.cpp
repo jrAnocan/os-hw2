@@ -52,16 +52,18 @@ void* addRowAB(void* args)
 {
 
     int cur_row = *((int*) args);
-    
+
     for(int i=0;i<m;i++)
     {
         int val = A[cur_row][i] + B[cur_row][i];
+       hw2_write_output(0,cur_row+1,i+1,val);
         J[cur_row][i] = val;
-        hw2_write_output(0,cur_row+1,i+1,val);
+
     }
     sem_post(&ready_J[cur_row]);
     pthread_exit(0);
 }
+
 
 
 void checkTheColumnOfL(int i)
@@ -84,47 +86,50 @@ void* addRowCD(void* args)
 {
 
     int cur_row = *((int*) args);
-    
+
     for(int i=0;i<k;i++)
     {
         int val = C[cur_row][i] + D[cur_row][i];
+
         hw2_write_output(1,cur_row+1,i+1,val);
         L[cur_row][i] = val;
-        
-        
-        
-        
+
+
+
+
         checkTheColumnOfL(i);
 
-        
+
     }
-    
+
     pthread_exit(0);
 }
+
 
 
 void* multiplyJL(void* args)
 {
     int cur_row = *((int*) args);
-    
+
     sem_wait(&ready_J[cur_row]);
 
 
     for(int i=0;i<k;i++)
     {
-        
-            sem_wait(&ready_L[i]);           //think what happens if context switch between these two
-            multiplyMatrix(cur_row, i); // i changed the order 
-            sem_post(&ready_L[i]);
-            
 
-        
-        
+            sem_wait(&ready_L[i]);           //think what happens if context switch between these two
+            sem_post(&ready_L[i]);
+            multiplyMatrix(cur_row, i); // i changed the order 
+
+
+
+
+
     }
 
 
 
-    
+
 
     pthread_mutex_lock(&finished_jl_row);
     finished_rows_JL++;
@@ -135,6 +140,7 @@ void* multiplyJL(void* args)
     pthread_mutex_unlock(&finished_jl_row);
     pthread_exit(0);
 }
+
 void getInitialMatrix(int**& M, int i, int n,int nn, vector<vector<int>>& lines)
 {
     
